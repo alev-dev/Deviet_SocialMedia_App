@@ -12,9 +12,7 @@ export default function Timeline() {
   }, []);
 
   const getDeveets = async () => {
-    const { data } = await axios.get(
-      "https://deviet-backend.herokuapp.com/api/deveet"
-    );
+    const { data } = await axios.get(`${process.env.BACKEND_URL}api/deveet`);
     setdeveets(data);
   };
 

@@ -16,12 +16,9 @@ export const AuthProvider = ({ children }) => {
   const getUser = async (callback) => {
     const idToken = localStorage.getItem("token");
     if (idToken) {
-      const { data } = await axios.post(
-        "https://deviet-backend.herokuapp.com/api/auth",
-        {
-          idToken,
-        }
-      );
+      const { data } = await axios.post(`${process.env.BACKEND_URL}api/auth`, {
+        idToken,
+      });
       const { name, email, picture, sub } = data;
       if (name) {
         setUser({ name, email, picture, id: sub });

@@ -44,10 +44,13 @@ export default function Compoose() {
     var file = e.target.files[0];
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", "u45m9vyq");
+    formData.append("upload_preset", process.env.API_CLOUDINARY_SECRET);
     setloading(null);
     axios
-      .post("https://api.cloudinary.com/v1_1/dxyv7aypq/image/upload", formData)
+      .post(
+        `https://api.cloudinary.com/v1_1/${process.env.API_CLOUD_SECRET}/image/upload`,
+        formData
+      )
       .then((response) => {
         setloading(1);
         setdeveet({ ...deveet, img: response.data.url });
@@ -58,10 +61,13 @@ export default function Compoose() {
     var file = e.target.files[0];
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", "u45m9vyq");
+    formData.append("upload_preset", process.env.API_CLOUDINARY_SECRET);
     setloading(null);
     axios
-      .post("https://api.cloudinary.com/v1_1/dxyv7aypq/video/upload", formData)
+      .post(
+        `https://api.cloudinary.com/v1_1/${process.env.API_CLOUD_SECRET}/video/upload`,
+        formData
+      )
       .then((response) => {
         setloading(1);
         setdeveet({ ...deveet, video: response.data.url });

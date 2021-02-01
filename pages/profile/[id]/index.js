@@ -19,7 +19,7 @@ export default function Profile({ user }) {
 
   const getDeveets = async () => {
     const { data } = await axios.get(
-      `https://deviet-backend.herokuapp.com/api/deveet/user/${user.googleId}`
+      `${process.env.BACKEND_URL}api/deveet/user/${user.googleId}`
     );
     settimeLine(data);
   };
@@ -84,9 +84,7 @@ export default function Profile({ user }) {
 
 export const getServerSideProps = async (ctx) => {
   const { id } = ctx.params;
-  const { data } = await axios.get(
-    `https://deviet-backend.herokuapp.com/api/user/${id}`
-  );
+  const { data } = await axios.get(`${process.env.BACKEND_URL}api/user/${id}`);
   return {
     props: {
       user: data,

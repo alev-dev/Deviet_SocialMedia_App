@@ -18,7 +18,7 @@ export default function Home() {
   const responseGoogle = ({ tokenId, profileObj }) => {
     const { name, imageUrl, email, googleId } = profileObj;
     axios
-      .post("https://deviet-backend.herokuapp.com/api/user", {
+      .post(`${process.env.BACKEND_URL}api/user`, {
         username: name,
         email,
         googleId,
