@@ -40,7 +40,13 @@ export default function Deveet({
             </Link>
           </header>
           <p>{content}</p>
-          {img && <img src={img} />}
+          {img && (
+            <Link href={img}>
+              <a>
+                <img src={img} />
+              </a>
+            </Link>
+          )}
 
           {video && (
             <ReactPlayer
