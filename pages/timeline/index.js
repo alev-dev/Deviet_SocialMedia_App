@@ -12,7 +12,9 @@ export default function Timeline() {
   }, []);
 
   const getDeveets = async () => {
-    const { data } = await axios.get(`${process.env.BACKEND_URL}api/deveet`);
+    const { data } = await axios.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/deveet`
+    );
     setdeveets(data);
   };
 

@@ -18,7 +18,7 @@ export default function Home() {
   const responseGoogle = ({ tokenId, profileObj }) => {
     const { name, imageUrl, email, googleId } = profileObj;
     axios
-      .post(`${process.env.BACKEND_URL}api/user`, {
+      .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user`, {
         username: name,
         email,
         googleId,
@@ -39,7 +39,7 @@ export default function Home() {
   return (
     <div>
       <img src="img/logo.png" alt="" />
-      <h2>Welcome to Devtit</h2>
+      <h2>Welcome to Devit</h2>
       <h3>A site social to talk about development with developers</h3>
 
       {user === undefined && <h2>Loading</h2>}
