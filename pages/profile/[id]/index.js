@@ -19,7 +19,7 @@ export default function Profile({ user }) {
 
   const getDeveets = async () => {
     const { data } = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}api/deveet/user/${user.googleId}`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/deveet/user/${user.googleId}`
     );
     settimeLine(data);
   };
