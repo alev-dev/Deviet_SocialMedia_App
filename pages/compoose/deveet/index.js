@@ -8,6 +8,7 @@ import Back from "../../../icons/Back";
 import AddVideo from "../../../icons/AddVideo";
 import Add from "../../../icons/Add";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 export default function Compoose() {
   const [deveet, setdeveet] = useState({
@@ -20,7 +21,7 @@ export default function Compoose() {
     video: null,
   });
   const [loading, setloading] = useState(undefined);
-
+  const router = useRouter();
   const { user } = useUser();
 
   useEffect(() => {
@@ -72,11 +73,9 @@ export default function Compoose() {
     axios
       .post("https://deviet-backend.herokuapp.com/api/deveet", deveet)
       .then((res) => {
-        console.log(res);
+        router.push("/timeline");
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }
 
   function DeleteImage() {
