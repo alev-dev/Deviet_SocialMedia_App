@@ -85,7 +85,7 @@ export default function Profile({ user }) {
 export const getServerSideProps = async (ctx) => {
   const { id } = ctx.params;
   const { data } = await axios.get(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}api/user/${id}`
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/${id}`
   );
   return {
     props: {

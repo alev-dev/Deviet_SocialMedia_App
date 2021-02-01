@@ -83,7 +83,7 @@ export default function Compoose() {
     e.preventDefault();
 
     axios
-      .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/deveet`, deveet)
+      .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/deveet`, deveet)
       .then((res) => {
         router.push("/timeline");
       })
