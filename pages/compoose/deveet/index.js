@@ -153,7 +153,7 @@ export default function Compoose() {
             onChange={(e) => handleTextArea(e)}
             placeholder="Que estas pensando"
           ></textarea>
-          {loading === null && <h2>Loading</h2>}
+          {loading === null && <div class="loader"></div>}
           {deveet.img && (
             <section className="remove-image">
               <button className="close" onClick={() => DeleteImage()}>
@@ -184,6 +184,7 @@ export default function Compoose() {
           </button>
         </form>
       </section>
+
       <style jsx>
         {`
           form {

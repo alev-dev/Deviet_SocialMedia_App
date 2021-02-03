@@ -1,22 +1,79 @@
 import Avatar from "./Avatar";
 import Link from "next/link";
 import useTimeAgo from "../hooks/useTimeAgo";
-import Share from "../icons/Share";
-import Star from "../icons/Star";
 import ReactPlayer from "react-player";
+import CommentIcon from "../icons/Comment";
+import Ok from "../icons/Ok";
+import { useState } from "react";
+import { useUser } from "../context/useUser";
+import Comment from "../components/Comment";
+import axios from "axios";
+import Delete from "../icons/Delete";
 
 export default function Deveet({
   avatar,
   username,
   content,
-  id,
+  _id,
   img,
   video,
   idUser,
   createdAt,
   likes,
+  comments,
 }) {
+  const { user } = useUser();
   const timeago = useTimeAgo(new Date(createdAt));
+  const [comment, setcomment] = useState("");
+  const [commentsState, setCommentsState] = useState(comments);
+  const [inputVisible, setinputVisible] = useState(false);
+
+  const sendComment = async () => {
+    var newComment = {
+      idDeveet: _id,
+      idUser: user.id,
+      username: user.name,
+      avatar: user.picture,
+      content: comment,
+      createdAt: new Date(),
+    };
+    await axios
+      .put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/deveet/${_id}`, {
+        avatar,
+        username,
+        content,
+        img,
+        video,
+        idUser,
+        likes,
+        comments: [...comments, newComment],
+      })
+      .then((res) => {
+        setCommentsState([...commentsState, newComment]);
+        setcomment("");
+      });
+  };
+
+  const deleteComment = async (index) => {
+    var res = comments;
+    res.splice(index, 1);
+
+    await axios
+      .put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/deveet/${_id}`, {
+        avatar,
+        username,
+        content,
+        img,
+        video,
+        idUser,
+        likes,
+        comments: res,
+      })
+      .then((res) => {
+        setCommentsState(res);
+        console.log("updated");
+      });
+  };
 
   return (
     <div className="card">
@@ -33,7 +90,7 @@ export default function Deveet({
               </a>
             </Link>
             <span> . </span>
-            <Link href={`/${username}/status/${id}`}>
+            <Link href={`/${username}/status/${_id}`}>
               <a>
                 <time>{timeago}</time>
               </a>
@@ -58,12 +115,59 @@ export default function Deveet({
           )}
         </section>
       </article>
+      <nav>
+        <label onClick={() => setinputVisible(!inputVisible)}>
+          <CommentIcon />
+        </label>
+        <form>
+          <input
+            type="text"
+            onChange={(event) => setcomment(event.target.value)}
+            value={comment}
+          ></input>
+          {comment.length > 0 && (
+            <label onClick={(event) => sendComment()}>
+              <Ok />
+            </label>
+          )}
+        </form>
+      </nav>
+      <div className="areaComments">
+        {user &&
+          commentsState.length > 0 &&
+          commentsState.map((item, index) => (
+            <Comment key={index} {...item}>
+              <label className="delete" onClick={() => deleteComment(index)}>
+                {user.id === item.idUser && <Delete width={21} height={21} />}
+              </label>
+            </Comment>
+          ))}
+      </div>
 
       <style jsx>
         {`
+          .comments {
+            max-height: 200px;
+          }
+          .delete {
+            margin-left: 10px;
+          }
+          .areaComments {
+            overflow-y: scroll;
+            max-height: 200px;
+          }
+
+          h5 {
+            margin: 0;
+            text-align: center;
+          }
           article {
             padding: 10px 15px;
             display: flex;
+          }
+          form {
+            display: flex;
+            display: ${!inputVisible && "none"};
           }
 
           article:hover {
@@ -71,6 +175,9 @@ export default function Deveet({
           }
           div {
             padding-right: 10px;
+          }
+          label {
+            transition: all ease 0.8s;
           }
           .card {
             border-bottom: 1px solid #eee;
@@ -97,6 +204,8 @@ export default function Deveet({
           nav {
             display: flex;
             justify-content: space-around;
+            transition: all ease-in 0.7s;
+            margin-bottom: 4px;
           }
           .info {
             display: flex;
@@ -113,42 +222,15 @@ export default function Deveet({
           a:hover {
             text-decoration: underline;
           }
+          form {
+            margin: 0;
+          }
+          input {
+            border: 1px solid #eee;
+            margin-right: 5px;
+          }
         `}
       </style>
     </div>
   );
 }
-
-/* export default function Deveet({
-  avatar,
-  username,
-  idUser,
-  content,
-  likes,
-  mediaUrl,
-}) {
-  return (
-    <div className="card">
-      <article>
-        <div>
-          <Avatar avatar={avatar} username={username} />
-        </div>
-        <section>
-          <header>
-            <Link href="/">
-              <a>
-                <strong>{username}</strong>
-              </a>
-            </Link>
-            <span>.</span>
-          </header>
-          <p>{content}</p>
-          <nav>
-            <p>{likes}</p>
-          </nav>
-        </section>
-      </article>
-    </div>
-  );
-}
- */

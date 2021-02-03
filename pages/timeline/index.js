@@ -23,7 +23,7 @@ export default function Timeline() {
       <Navbar />
       <section>
         {deveets.map((deveet, index) => (
-          <Deveet key={index} {...deveet} />
+          <Deveet key={index} update={getDeveets} {...deveet} />
         ))}
       </section>
       <Footer />

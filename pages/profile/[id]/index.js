@@ -3,7 +3,6 @@ import Link from "next/link";
 import Back from "../../../icons/Back";
 import Avatar from "../../../components/Avatar";
 import Deveet from "../../../components/Deveet";
-import { useUser } from "../../../context/useUser";
 import axios from "axios";
 
 export default function Profile({ user }) {
