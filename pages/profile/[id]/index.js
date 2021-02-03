@@ -4,13 +4,14 @@ import Back from "../../../icons/Back";
 import Avatar from "../../../components/Avatar";
 import Deveet from "../../../components/Deveet";
 import axios from "axios";
+import { useUser } from "../../../context/useUser";
 
-export default function Profile({ user }) {
+export default function Profile({ userProfile }) {
   const [timeLine, settimeLine] = useState([]);
-
+  const { user } = useUser();
   useEffect(() => {
-    if (user) {
-      if (user.username) {
+    if (userProfile) {
+      if (userProfile.username) {
         getDeveets();
       }
     }
@@ -18,34 +19,38 @@ export default function Profile({ user }) {
 
   const getDeveets = async () => {
     const { data } = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/deveet/user/${user.googleId}`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/deveet/user/${userProfile.googleId}`
     );
     settimeLine(data);
   };
 
   return (
     <>
-      <header>
-        <Link href="/timeline">
-          <a>
-            <Back width={32} height={32} />
-          </a>
-        </Link>
-        {user !== undefined && user !== null && (
-          <Avatar avatar={user.avatar}></Avatar>
-        )}
-        {user && (
-          <div className="name">
-            <h4>{user.username}</h4>
-            <p>{timeLine.length} Deveets</p>
-          </div>
-        )}
-      </header>
-
+      {user ? (
+        <header>
+          <Link href="/timeline">
+            <a>
+              <Back width={32} height={32} />
+            </a>
+          </Link>
+          {userProfile !== undefined && userProfile !== null && (
+            <Avatar avatar={userProfile.avatar}></Avatar>
+          )}
+          {userProfile && (
+            <div className="name">
+              <h4>{userProfile.username}</h4>
+              <p>{timeLine.length} Deveets</p>
+            </div>
+          )}
+        </header>
+      ) : (
+        <div className="loader"></div>
+      )}
       {timeLine &&
         timeLine.map((deveet, index) => (
           <Deveet key={deveet._id} {...deveet} />
         ))}
+
       <style jsx>
         {`
           header {
@@ -88,7 +93,7 @@ export const getServerSideProps = async (ctx) => {
   );
   return {
     props: {
-      user: data,
+      userProfile: data,
     },
   };
 };

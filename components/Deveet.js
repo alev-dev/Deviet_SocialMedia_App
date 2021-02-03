@@ -9,6 +9,7 @@ import { useUser } from "../context/useUser";
 import Comment from "../components/Comment";
 import axios from "axios";
 import Delete from "../icons/Delete";
+import Like from "../icons/Like";
 
 export default function Deveet({
   avatar,
@@ -21,13 +22,14 @@ export default function Deveet({
   createdAt,
   likes,
   comments,
+  children,
 }) {
   const { user } = useUser();
   const timeago = useTimeAgo(new Date(createdAt));
   const [comment, setcomment] = useState("");
   const [commentsState, setCommentsState] = useState(comments);
   const [inputVisible, setinputVisible] = useState(false);
-
+  const [like, setlike] = useState(false);
   const sendComment = async () => {
     var newComment = {
       idDeveet: _id,
@@ -95,6 +97,7 @@ export default function Deveet({
                 <time>{timeago}</time>
               </a>
             </Link>
+            {children}
           </header>
           <p>{content}</p>
           {img && (
@@ -116,6 +119,9 @@ export default function Deveet({
         </section>
       </article>
       <nav>
+        <label onClick={() => setlike(!like)}>
+          <Like fill={like ? "#e90a0a" : "none"} />
+        </label>
         <label onClick={() => setinputVisible(!inputVisible)}>
           <CommentIcon />
         </label>

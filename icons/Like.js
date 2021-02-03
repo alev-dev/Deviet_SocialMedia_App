@@ -3,18 +3,18 @@ import * as React from "react";
 function SvgComponent(props) {
   return (
     <svg
-      height={21}
-      viewBox="0 0 21 21"
-      width={21}
       xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width={26}
+      height={26}
+      stroke="#e90a0a"
       {...props}
     >
       <path
-        d="M10.5 14.5l-5 3 2-5.131-4-3.869h5l2-5 2 5h5l-4 4 2 5z"
-        fill="none"
-        stroke="#011"
         strokeLinecap="round"
         strokeLinejoin="round"
+        strokeWidth={1}
+        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
       />
     </svg>
   );
