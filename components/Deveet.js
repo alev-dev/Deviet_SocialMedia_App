@@ -71,6 +71,10 @@ export default function Deveet({
     const pos = likesState.findIndex((like) => like.userId === user.id);
     var aux = likes;
     if (pos === -1) {
+      setlikesState([
+        ...likesState,
+        { userId: user.id, avatar: user.picture, name: user.name },
+      ]);
       await axios
         .put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/deveet/${_id}`, {
           likes: [
@@ -78,25 +82,15 @@ export default function Deveet({
             { userId: user.id, avatar: user.picture, name: user.name },
           ],
         })
-        .then((res) => {
-          console.log("done");
-          setlikesState([
-            ...likesState,
-            { userId: user.id, avatar: user.picture, name: user.name },
-          ]);
-        });
+        .then((res) => {});
     } else {
-      console.log("delete");
       aux.splice(pos, 1);
-
+      setlikesState([...aux]);
       await axios
         .put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/deveet/${_id}`, {
           likes: aux,
         })
-        .then(() => {
-          setlikesState([...aux]);
-          return aux;
-        });
+        .then(() => {});
     }
   };
 
@@ -152,11 +146,14 @@ export default function Deveet({
               }
             />
           </label>
-          <p>{likesState.length}</p>
+          <strong>{likesState.length}</strong>
         </div>
-        <label onClick={() => setinputVisible(!inputVisible)}>
-          <CommentIcon />
-        </label>
+        <div className="sectionComment">
+          <label onClick={() => setinputVisible(!inputVisible)}>
+            <CommentIcon />
+          </label>
+          {!inputVisible && <strong>{commentsState.length}</strong>}
+        </div>
         <form>
           <input
             type="text"
@@ -193,7 +190,8 @@ export default function Deveet({
           .comments {
             max-height: 200px;
           }
-          .delete {
+          .delete,
+          .sectionComment {
             margin-left: 10px;
           }
           .areaComments {
@@ -201,6 +199,10 @@ export default function Deveet({
             max-height: 200px;
           }
           .sectionLike {
+            display: flex;
+            align-items: center;
+          }
+          .sectionComment {
             display: flex;
             align-items: center;
           }
