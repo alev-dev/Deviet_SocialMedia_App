@@ -47,6 +47,7 @@ export default function Deveet({
     await axios
       .put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/deveet/${_id}`, {
         comments: [...comments, newComment],
+        likes: likesState,
       })
       .then((res) => {
         setCommentsState([...commentsState, newComment]);
@@ -61,6 +62,7 @@ export default function Deveet({
     await axios
       .put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/deveet/${_id}`, {
         comments: res,
+        likes: likesState,
       })
       .then((res) => {
         setCommentsState(res);
@@ -69,7 +71,7 @@ export default function Deveet({
   };
   const handleLikeButton = async () => {
     const pos = likesState.findIndex((like) => like.userId === user.id);
-    var aux = likes;
+    var aux = likesState;
     if (pos === -1) {
       setlikesState([
         ...likesState,
@@ -77,6 +79,7 @@ export default function Deveet({
       ]);
       await axios
         .put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/deveet/${_id}`, {
+          comments: comments,
           likes: [
             ...likesState,
             { userId: user.id, avatar: user.picture, name: user.name },
@@ -88,6 +91,7 @@ export default function Deveet({
       setlikesState([...aux]);
       await axios
         .put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/deveet/${_id}`, {
+          comments: comments,
           likes: aux,
         })
         .then(() => {});
@@ -169,8 +173,13 @@ export default function Deveet({
       </nav>
       <div className="likesUser">
         {likesState.length > 0 &&
-          likesState.map((item) => (
-            <img className="likeImg" src={item.avatar} height="22"></img>
+          likesState.map((item, index) => (
+            <img
+              key={index}
+              className="likeImg"
+              src={item.avatar}
+              height="22"
+            ></img>
           ))}
       </div>
       <div className="areaComments">

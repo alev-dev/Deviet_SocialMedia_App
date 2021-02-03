@@ -56,7 +56,8 @@ export default function Compoose() {
       )
       .then((response) => {
         setloading(1);
-        setdeveet({ ...deveet, img: response.data.url });
+
+        setdeveet({ ...deveet, img: response.data.secure_url });
       });
   }
   function onAddVideo(e) {
@@ -76,7 +77,7 @@ export default function Compoose() {
       )
       .then((response) => {
         setloading(1);
-        setdeveet({ ...deveet, video: response.data.url });
+        setdeveet({ ...deveet, video: response.data.secure_url });
       });
   }
   function createDeveet(e) {
@@ -153,7 +154,7 @@ export default function Compoose() {
             onChange={(e) => handleTextArea(e)}
             placeholder="Que estas pensando"
           ></textarea>
-          {loading === null && <div class="loader"></div>}
+          {loading === null && <div className="loader"></div>}
           {deveet.img && (
             <section className="remove-image">
               <button className="close" onClick={() => DeleteImage()}>
