@@ -42,8 +42,7 @@ export default function Home() {
       <h2>Welcome to Devit</h2>
       <h3>A site social to talk about development with developers</h3>
 
-      {user === undefined && <h2>Loading</h2>}
-      {user === null && (
+      {user === null ? (
         <GoogleLogin
           clientId="365928965363-tiqenhoq6ifss2r9jighm1d0lhvinnlr.apps.googleusercontent.com"
           buttonText="Login"
@@ -59,6 +58,8 @@ export default function Home() {
           onFailure={responseGoogle}
           cookiePolicy={"single_host_origin"}
         />
+      ) : (
+        <div className="loader"></div>
       )}
 
       <style jsx>

@@ -4,7 +4,7 @@ import useTimeAgo from "../hooks/useTimeAgo";
 import ReactPlayer from "react-player";
 import CommentIcon from "../icons/Comment";
 import Ok from "../icons/Ok";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUser } from "../context/useUser";
 import Comment from "../components/Comment";
 import axios from "axios";
@@ -29,7 +29,12 @@ export default function Deveet({
   const [comment, setcomment] = useState("");
   const [commentsState, setCommentsState] = useState(comments);
   const [inputVisible, setinputVisible] = useState(false);
-  const [like, setlike] = useState(false);
+  const [likesState, setlikesState] = useState([]);
+
+  useEffect(() => {
+    setlikesState(likes);
+  }, []);
+
   const sendComment = async () => {
     var newComment = {
       idDeveet: _id,
@@ -41,13 +46,6 @@ export default function Deveet({
     };
     await axios
       .put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/deveet/${_id}`, {
-        avatar,
-        username,
-        content,
-        img,
-        video,
-        idUser,
-        likes,
         comments: [...comments, newComment],
       })
       .then((res) => {
@@ -62,19 +60,44 @@ export default function Deveet({
 
     await axios
       .put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/deveet/${_id}`, {
-        avatar,
-        username,
-        content,
-        img,
-        video,
-        idUser,
-        likes,
         comments: res,
       })
       .then((res) => {
         setCommentsState(res);
         console.log("updated");
       });
+  };
+  const handleLikeButton = async () => {
+    const pos = likesState.findIndex((like) => like.userId === user.id);
+    var aux = likes;
+    if (pos === -1) {
+      await axios
+        .put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/deveet/${_id}`, {
+          likes: [
+            ...likesState,
+            { userId: user.id, avatar: user.picture, name: user.name },
+          ],
+        })
+        .then((res) => {
+          console.log("done");
+          setlikesState([
+            ...likesState,
+            { userId: user.id, avatar: user.picture, name: user.name },
+          ]);
+        });
+    } else {
+      console.log("delete");
+      aux.splice(pos, 1);
+
+      await axios
+        .put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/deveet/${_id}`, {
+          likes: aux,
+        })
+        .then(() => {
+          setlikesState([...aux]);
+          return aux;
+        });
+    }
   };
 
   return (
@@ -103,7 +126,7 @@ export default function Deveet({
           {img && (
             <Link href={img}>
               <a>
-                <img src={img} />
+                <img className="imgDeveet" src={img} />
               </a>
             </Link>
           )}
@@ -119,9 +142,18 @@ export default function Deveet({
         </section>
       </article>
       <nav>
-        <label onClick={() => setlike(!like)}>
-          <Like fill={like ? "#e90a0a" : "none"} />
-        </label>
+        <div className="sectionLike">
+          <label onClick={() => handleLikeButton()}>
+            <Like
+              fill={
+                likesState.findIndex((like) => like.userId === user.id) != -1
+                  ? "#e90a0a"
+                  : "none"
+              }
+            />
+          </label>
+          <p>{likesState.length}</p>
+        </div>
         <label onClick={() => setinputVisible(!inputVisible)}>
           <CommentIcon />
         </label>
@@ -138,6 +170,12 @@ export default function Deveet({
           )}
         </form>
       </nav>
+      <div className="likesUser">
+        {likesState.length > 0 &&
+          likesState.map((item) => (
+            <img className="likeImg" src={item.avatar} height="22"></img>
+          ))}
+      </div>
       <div className="areaComments">
         {user &&
           commentsState.length > 0 &&
@@ -162,7 +200,18 @@ export default function Deveet({
             overflow-y: scroll;
             max-height: 200px;
           }
-
+          .sectionLike {
+            display: flex;
+            align-items: center;
+          }
+          .likesUser {
+            display: flex;
+          }
+          .likeImg {
+            border-radius: 999px;
+            margin-left: 8px;
+            margin-bottom: 2px;
+          }
           h5 {
             margin: 0;
             text-align: center;
@@ -191,11 +240,12 @@ export default function Deveet({
           p {
             margin: 0;
           }
+
           time {
             color: #555;
             font-size: 14px;
           }
-          img {
+          .imgDeveet {
             width: 100%;
             height: auto;
             border-radius: 16px;
