@@ -12,7 +12,7 @@ function SvgComponent(props) {
       <g
         fill="none"
         fillRule="evenodd"
-        stroke="#09f"
+        stroke="#e90a0a"
         strokeLinecap="round"
         strokeLinejoin="round"
       >

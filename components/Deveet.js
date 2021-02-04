@@ -101,20 +101,23 @@ export default function Deveet({
   return (
     <div className="card">
       <article>
-        <div>
+        <div id="profile">
           <Avatar avatar={avatar} alt={username} />
         </div>
 
         <section>
           <header>
-            <Link href={`/profile/${idUser}`}>
+            <Link
+              htmlFor="profile"
+              href={user.id === idUser ? "/myprofile" : `/profile/${idUser}`}
+            >
               <a>
                 <strong>{username}</strong>
               </a>
             </Link>
             <span> . </span>
             <Link href={`/${username}/status/${_id}`}>
-              <a>
+              <a className="backgroundLink">
                 <time>{timeago}</time>
               </a>
             </Link>
@@ -207,6 +210,8 @@ export default function Deveet({
             overflow-y: scroll;
             max-height: 200px;
           }
+          .backgroundLink {
+          }
           .sectionLike {
             display: flex;
             align-items: center;
@@ -265,7 +270,7 @@ export default function Deveet({
           section {
             width: 100%;
           }
-          a: {
+          a {
             text-decoration: none;
           }
           nav {

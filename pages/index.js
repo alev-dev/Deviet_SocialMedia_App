@@ -37,7 +37,7 @@ export default function Home() {
   };
 
   return (
-    <div>
+    <main>
       <img src="img/logo.png" alt="" />
       <h2>Welcome to Devit</h2>
       <h3>A site social to talk about development with developers</h3>
@@ -64,7 +64,7 @@ export default function Home() {
 
       <style jsx>
         {`
-          div {
+          main {
             display: grid;
             height: 100%;
             place-items: center;
@@ -101,6 +101,6 @@ export default function Home() {
           }
         `}
       </style>
-    </div>
+    </main>
   );
 }

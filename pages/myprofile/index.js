@@ -1,25 +1,25 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Back from "../../../icons/Back";
-import Avatar from "../../../components/Avatar";
-import Deveet from "../../../components/Deveet";
+import Back from "../../icons/Back";
+import Avatar from "../../components/Avatar";
+import Deveet from "../../components/Deveet";
 import axios from "axios";
-import { useUser } from "../../../context/useUser";
-import Delete from "../../../icons/Delete";
-import Navbar from "../../../components/Navbar";
+import { useUser } from "../../context/useUser";
+import Delete from "../../icons/Delete";
+import Navbar from "../../components/Navbar";
 
-export default function Profile({ userProfile }) {
+export default function Profile() {
   const [timeLine, settimeLine] = useState([]);
   const { user } = useUser();
   const [loading, setloading] = useState(undefined);
   useEffect(() => {
-    if (userProfile) {
-      if (userProfile.username) {
+    if (user) {
+      if (user) {
         setloading(null);
         getDeveets();
       }
     }
-  }, [userProfile]);
+  }, [user]);
 
   const deleteDeveet = (id, index) => {
     var aux = deveets;
@@ -34,7 +34,7 @@ export default function Profile({ userProfile }) {
 
   const getDeveets = async () => {
     const { data } = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/deveet/user/${userProfile.googleId}`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/deveet/user/${user.id}`
     );
     settimeLine(data);
     setloading(1);
@@ -42,6 +42,7 @@ export default function Profile({ userProfile }) {
 
   return (
     <>
+      <Navbar pos={2} />
       {user && (
         <header>
           <Link href="/timeline">
@@ -49,12 +50,12 @@ export default function Profile({ userProfile }) {
               <Back width={32} height={32} />
             </a>
           </Link>
-          {userProfile !== undefined && userProfile !== null && (
-            <Avatar avatar={userProfile.avatar}></Avatar>
+          {user !== undefined && user !== null && (
+            <Avatar avatar={user.picture}></Avatar>
           )}
-          {userProfile && (
+          {user && (
             <div className="name">
-              <h4>{userProfile.username}</h4>
+              <h4>{user.name}</h4>
               <p>{timeLine.length} Deveets</p>
             </div>
           )}
@@ -68,7 +69,7 @@ export default function Profile({ userProfile }) {
               className="delete"
               onClick={() => deleteDeveet(deveet._id, index)}
             >
-              {user.id === deveet.idUser && <Delete width={21} height={21} />}
+              <Delete width={21} height={21} />
             </label>
           </Deveet>
         ))
@@ -113,15 +114,3 @@ export default function Profile({ userProfile }) {
     </>
   );
 }
-
-export const getServerSideProps = async (ctx) => {
-  const { id } = ctx.params;
-  const { data } = await axios.get(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/${id}`
-  );
-  return {
-    props: {
-      userProfile: data,
-    },
-  };
-};

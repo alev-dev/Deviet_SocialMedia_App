@@ -7,6 +7,7 @@ import Head from "next/head";
 import Back from "../../../icons/Back";
 import AddVideo from "../../../icons/AddVideo";
 import Add from "../../../icons/Add";
+import Send from "../../../icons/Send";
 import axios from "axios";
 import { useRouter } from "next/router";
 
@@ -16,7 +17,6 @@ export default function Compoose() {
     username: "",
     avatar: "",
     content: "",
-    likes: 0,
     img: null,
     video: null,
   });
@@ -176,13 +176,20 @@ export default function Compoose() {
               />
             </section>
           )}
-          <button
-            className="send"
-            disabled={deveet.content.length < 1}
-            onClick={(e) => createDeveet(e)}
-          >
-            Devitear
-          </button>
+          <div className="btn">
+            <button
+              className="send"
+              disabled={
+                deveet.content.length < 1 && !deveet.img && !deveet.video
+              }
+              onClick={(e) => createDeveet(e)}
+            >
+              <div className="buttonContent">
+                <p>Publicar</p>
+                <Send />
+              </div>
+            </button>
+          </div>
         </form>
       </section>
 
@@ -192,7 +199,7 @@ export default function Compoose() {
             padding: 10px;
           }
           textarea {
-            border: 3px solid transparent;
+            border: 0;
             width: 100%;
             font-size: 18px;
             padding: 15px;
@@ -226,7 +233,7 @@ export default function Compoose() {
             pointer-events: none;
           }
           button:hover {
-            opacity: 0.9;
+            opacity: 1;
           }
           .buttons {
             display: flex;
@@ -236,19 +243,17 @@ export default function Compoose() {
           }
           .send {
             border: 1px solid black;
-            padding: 10px 20px;
-            background-color: black;
+            background-color: white;
             font-weight: 900;
-            color: white;
-            text-align: center;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            border-radius: 9999px;
             box-shadow: 3px 4px grey;
             margin-top: 10px;
             transition: opacity 0.8s ease-in;
             opacity: 0.8;
+            border-radius: 4px;
+          }
+          .buttonContent {
+            display: flex;
+            align-items: center;
           }
 
           .send[disabled] {
@@ -291,6 +296,10 @@ export default function Compoose() {
             background: radial-gradient(#0099ff22 15%, transparent 16%);
             background-size: 180px 180px;
             background-position: center;
+          }
+          .btn {
+            display: flex;
+            justify-content: center;
           }
         `}
       </style>
