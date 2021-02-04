@@ -30,7 +30,6 @@ export default function Friends() {
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/${user.id}`
     );
     setuserData(data);
-    console.log(data);
   };
 
   return (
@@ -61,7 +60,7 @@ export default function Friends() {
             <div className="others">
               {others.map(
                 (item, index) =>
-                  userData.id !== item.googleId && (
+                  userData.googleId !== item.googleId && (
                     <div key={index} className="user">
                       <div className="userData">
                         <img src={item.avatar} alt="" width={42} height={42} />
