@@ -4,6 +4,7 @@ import Home from "../icons/Home";
 import Logout from "../icons/Logout";
 import Friends from "../icons/Friends";
 import Profile from "../icons/Profile";
+import Lobby from "../icons/Lobby";
 import { useUser } from "../context/useUser";
 
 export default function Navbar({ pos }) {
@@ -35,6 +36,13 @@ export default function Navbar({ pos }) {
           </a>
         </Link>
       )}
+      {user && (
+        <Link href={`/lobby`}>
+          <a className="lobby">
+            <Lobby />
+          </a>
+        </Link>
+      )}
 
       <label onClick={logout}>
         <Logout />
@@ -56,6 +64,9 @@ export default function Navbar({ pos }) {
           }
           .profile {
             border-bottom: ${pos === 2 && "3px solid #09f"};
+          }
+          .lobby {
+            border-bottom: ${pos === 3 && "3px solid #09f"};
           }
           nav {
             top: 0;
