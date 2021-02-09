@@ -38,9 +38,9 @@ export default function Deveet({
   const sendComment = async () => {
     var newComment = {
       idDeveet: _id,
-      idUser: user.id,
-      username: user.name,
-      avatar: user.picture,
+      idUser: user.googleId,
+      username: user.username,
+      avatar: user.avatar,
       content: comment,
       createdAt: new Date(),
     };
@@ -70,19 +70,19 @@ export default function Deveet({
       });
   };
   const handleLikeButton = async () => {
-    const pos = likesState.findIndex((like) => like.userId === user.id);
+    const pos = likesState.findIndex((like) => like.userId === user.googleId);
     var aux = likesState;
     if (pos === -1) {
       setlikesState([
         ...likesState,
-        { userId: user.id, avatar: user.picture, name: user.name },
+        { userId: user.googleId, avatar: user.avatar, name: user.username },
       ]);
       await axios
         .put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/deveet/${_id}`, {
           comments: comments,
           likes: [
             ...likesState,
-            { userId: user.id, avatar: user.picture, name: user.name },
+            { userId: user.googleId, avatar: user.avatar, name: user.username },
           ],
         })
         .then((res) => {});
@@ -109,7 +109,9 @@ export default function Deveet({
           <header>
             <Link
               htmlFor="profile"
-              href={user.id === idUser ? "/myprofile" : `/profile/${idUser}`}
+              href={
+                user.googleId === idUser ? "/myprofile" : `/profile/${idUser}`
+              }
             >
               <a>
                 <strong>{username}</strong>
@@ -147,7 +149,8 @@ export default function Deveet({
           <label onClick={() => handleLikeButton()}>
             <Like
               fill={
-                likesState.findIndex((like) => like.userId === user.id) != -1
+                likesState.findIndex((like) => like.userId === user.googleId) !=
+                -1
                   ? "#e90a0a"
                   : "none"
               }
@@ -191,7 +194,9 @@ export default function Deveet({
           commentsState.map((item, index) => (
             <Comment key={index} {...item}>
               <label className="delete" onClick={() => deleteComment(index)}>
-                {user.id === item.idUser && <Delete width={21} height={21} />}
+                {user.googleId === item.idUser && (
+                  <Delete width={21} height={21} />
+                )}
               </label>
             </Comment>
           ))}

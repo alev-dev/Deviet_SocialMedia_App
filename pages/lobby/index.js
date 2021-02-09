@@ -38,6 +38,7 @@ export default function Lobby() {
     const { data } = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/chat`
     );
+    console.log(data);
     setchat(data);
     var element = document.getElementById("chatwindow");
     element.scrollTop = element.scrollHeight;
@@ -46,10 +47,10 @@ export default function Lobby() {
   const sendMessage = () => {
     if (socket) {
       socket.emit("newMessage", {
-        avatar: user.picture,
-        idUser: user.id,
+        avatar: user.avatar,
+        idUser: user.googleId,
         message: message,
-        name: user.name,
+        name: user.username,
       });
       setmessage("");
     }

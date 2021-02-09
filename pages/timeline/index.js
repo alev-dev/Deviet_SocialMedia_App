@@ -29,7 +29,6 @@ export default function Timeline() {
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/userlogged`
     );
     setonline(users.data);
-    console.log(users);
   };
 
   return (

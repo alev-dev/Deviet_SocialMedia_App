@@ -67,9 +67,7 @@ export default function Profile({ userProfile }) {
             <label
               className="delete"
               onClick={() => deleteDeveet(deveet._id, index)}
-            >
-              {user.id === deveet.idUser && <Delete width={21} height={21} />}
-            </label>
+            ></label>
           </Deveet>
         ))
       ) : (

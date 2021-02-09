@@ -6,6 +6,7 @@ import Friends from "../icons/Friends";
 import Profile from "../icons/Profile";
 import Lobby from "../icons/Lobby";
 import { useUser } from "../context/useUser";
+import Bell from "../icons/Bell";
 
 export default function Navbar({ pos }) {
   const router = useRouter();
@@ -22,12 +23,21 @@ export default function Navbar({ pos }) {
           <Home />
         </a>
       </Link>
-      {user && (
-        <Link href={`/${user.name}/friends/${user.id}`}>
+      {user && pos === 1 ? (
+        <Link href={`/${user.username}/request/`}>
           <a className="friends">
-            <Friends />
+            <Bell />
+            <p>{user.friendrequests.length}</p>
           </a>
         </Link>
+      ) : (
+        user && (
+          <Link href={`/${user.username}/friends/${user.googleId}`}>
+            <a className="friends">
+              <Friends />
+            </a>
+          </Link>
+        )
       )}
       {user && (
         <Link href={`/myprofile`}>
@@ -55,6 +65,10 @@ export default function Navbar({ pos }) {
           }
           label {
             margin-top: 5px;
+          }
+          p {
+            display: inline;
+            color: red;
           }
           .home {
             border-bottom: ${pos === 0 && "3px solid #09f"};

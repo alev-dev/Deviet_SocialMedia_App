@@ -28,9 +28,9 @@ export default function Compoose() {
     if (user !== undefined && user !== null) {
       setdeveet((deveet) => ({
         ...deveet,
-        idUser: user.id,
-        username: user.name,
-        avatar: user.picture,
+        idUser: user.googleId,
+        username: user.username,
+        avatar: user.avatar,
       }));
     }
   }, [user]);
@@ -139,8 +139,8 @@ export default function Compoose() {
         <section className="avatar-container">
           {user !== undefined && user !== null && (
             <Avatar
-              avatar={user.picture}
-              alt={user.name}
+              avatar={user.avatar}
+              alt={user.username}
               width="45"
               height="45"
             />

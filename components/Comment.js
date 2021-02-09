@@ -13,7 +13,6 @@ export default function Comment({
   children,
 }) {
   const timeago = useTimeAgo(new Date(createdAt));
-  const { user } = useUser();
 
   return (
     <article>

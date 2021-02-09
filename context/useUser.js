@@ -27,11 +27,10 @@ export const AuthProvider = ({ children }) => {
           idToken,
         }
       );
-      const { name, email, picture, sub } = data;
-      if (name) {
-        setUser({ name, email, picture, id: sub });
+      if (data.username) {
+        setUser(data);
 
-        callback({ name, email, picture, id: sub });
+        callback(data);
       } else {
         setUser(null);
         localStorage.removeItem("token");

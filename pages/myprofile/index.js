@@ -34,7 +34,7 @@ export default function Profile() {
 
   const getDeveets = async () => {
     const { data } = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/deveet/user/${user.id}`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/deveet/user/${user.googleId}`
     );
     settimeLine(data);
     setloading(1);
@@ -51,11 +51,11 @@ export default function Profile() {
             </a>
           </Link>
           {user !== undefined && user !== null && (
-            <Avatar avatar={user.picture}></Avatar>
+            <Avatar avatar={user.avatar}></Avatar>
           )}
           {user && (
             <div className="name">
-              <h4>{user.name}</h4>
+              <h4>{user.username}</h4>
               <p>{timeLine.length} Deveets</p>
             </div>
           )}

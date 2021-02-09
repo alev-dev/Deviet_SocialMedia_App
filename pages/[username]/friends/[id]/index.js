@@ -5,7 +5,7 @@ import Navbar from "../../../../components/Navbar";
 import { useUser } from "../../../../context/useUser";
 import AddFriend from "../../../../icons/AddFriend";
 import Empty from "../../../../svg/Empty";
-
+import Cancel from "../../../../icons/Cancel";
 export default function Friends() {
   const [others, setothers] = useState([]);
   const { user } = useUser();
@@ -13,8 +13,8 @@ export default function Friends() {
   useEffect(() => {
     getUsers();
     if (user) {
-      if (user.id) {
-        getDataUser();
+      if (user.googleId) {
+        setuserData(user);
       }
     }
   }, [user]);
@@ -25,11 +25,62 @@ export default function Friends() {
     setothers(data);
   };
 
-  const getDataUser = async () => {
-    const { data } = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/${user.id}`
+  const sendRequest = async (pos) => {
+    var aux = others[pos];
+    var listSend = userData.friendsendquest;
+    listSend.push({
+      name: aux.username,
+      id: aux._id,
+      avatar: aux.avatar,
+      googleId: aux.googleId,
+    });
+    setuserData({ ...userData, friendsendquest: listSend });
+    await axios.put(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/${userData._id}`,
+      { friendsendquest: listSend }
     );
-    setuserData(data);
+    const { data } = await axios.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/${aux.googleId}`
+    );
+    var requestlist = data.friendrequests;
+    requestlist.push({
+      name: userData.username,
+      id: userData._id,
+      avatar: userData.avatar,
+      googleId: userData.googleId,
+    });
+    await axios.put(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/${data._id}`,
+      { friendrequests: requestlist }
+    );
+  };
+
+  const cancelRequest = async (pos) => {
+    var aux = others[pos];
+    const exits = userData.friendsendquest.findIndex(
+      (item) => item.id === aux._id
+    );
+    if (exits !== -1) {
+      var newSendReq = userData.friendsendquest;
+      newSendReq.splice(exits, 1);
+      setuserData({ ...userData, friendsendquest: newSendReq });
+      await axios.put(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/${userData._id}`,
+        { friendsendquest: newSendReq }
+      );
+    }
+    const { data } = await axios.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/${aux.googleId}`
+    );
+    var requestlist = data.friendrequests;
+    const exits2 = requestlist.findIndex((item) => item.id === userData._id);
+    if (exits2 !== -1) {
+      requestlist.splice(exits2, 1);
+      await axios.put(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/${data._id}`,
+        { friendrequests: requestlist }
+      );
+    }
   };
 
   return (
@@ -41,7 +92,7 @@ export default function Friends() {
             <div className="friends">
               <h3>Amigos</h3>
               {userData.friends.length === 0 ? (
-                <div>
+                <div className="imageEmpty">
                   <Empty />
                   <h4>No tienes amigos aun</h4>
                 </div>
@@ -60,17 +111,26 @@ export default function Friends() {
             <div className="others">
               {others.map(
                 (item, index) =>
-                  userData.googleId !== item.googleId && (
+                  userData.googleId !== item.googleId &&
+                  userData.friends.findIndex(
+                    (fr) => fr.googleId === item.googleId
+                  ) === -1 && (
                     <div key={index} className="user">
                       <div className="userData">
                         <img src={item.avatar} alt="" width={42} height={42} />
                         <h4>{item.username}</h4>
                       </div>
-                      <Link href="/working">
-                        <label>
+                      {userData.friendsendquest.findIndex(
+                        (userI) => userI.id === item._id
+                      ) === -1 ? (
+                        <label onClick={() => sendRequest(index)}>
                           <AddFriend />
                         </label>
-                      </Link>
+                      ) : (
+                        <label onClick={() => cancelRequest(index)}>
+                          <Cancel />
+                        </label>
+                      )}
                     </div>
                   )
               )}
@@ -89,6 +149,12 @@ export default function Friends() {
           }
           label {
             margin-right: 10px;
+          }
+          .imageEmpty {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
           }
           h4,
           h3 {
