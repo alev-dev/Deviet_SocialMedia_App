@@ -29,13 +29,13 @@ export default function Request() {
     );
     var aux = request;
     const newReq = aux.splice(pos, 1);
-    console.log(newReq[0]);
+    console.log(aux);
     var newFriends = user.friends;
     newFriends.push(newReq[0]);
     setrequest(aux);
     await axios.put(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/${user._id}`,
-      { friendrequests: aux, friends: newFriends }
+      { ...user, friendrequests: aux, friends: newFriends }
     );
     var requestlist = data.friendsendquest;
     const exist = requestlist.findIndex((item) => item.id === user._id);
@@ -44,7 +44,7 @@ export default function Request() {
     listfriends.push(newfr[0]);
     await axios.put(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/${data._id}`,
-      { friendsendquest: requestlist, friends: listfriends }
+      { ...data, friendsendquest: requestlist, friends: listfriends }
     );
   };
 

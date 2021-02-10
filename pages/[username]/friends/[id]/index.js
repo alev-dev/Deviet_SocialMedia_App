@@ -6,6 +6,7 @@ import { useUser } from "../../../../context/useUser";
 import AddFriend from "../../../../icons/AddFriend";
 import Empty from "../../../../svg/Empty";
 import Cancel from "../../../../icons/Cancel";
+import Message from "../../../../icons/Message";
 export default function Friends() {
   const [others, setothers] = useState([]);
   const { user } = useUser();
@@ -37,7 +38,7 @@ export default function Friends() {
     setuserData({ ...userData, friendsendquest: listSend });
     await axios.put(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/${userData._id}`,
-      { friendsendquest: listSend }
+      { ...userData, friendsendquest: listSend }
     );
     const { data } = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/${aux.googleId}`
@@ -51,7 +52,7 @@ export default function Friends() {
     });
     await axios.put(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/${data._id}`,
-      { friendrequests: requestlist }
+      { ...data, friendrequests: requestlist }
     );
   };
 
@@ -66,7 +67,7 @@ export default function Friends() {
       setuserData({ ...userData, friendsendquest: newSendReq });
       await axios.put(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/${userData._id}`,
-        { friendsendquest: newSendReq }
+        { ...userData, friendsendquest: newSendReq }
       );
     }
     const { data } = await axios.get(
@@ -78,7 +79,7 @@ export default function Friends() {
       requestlist.splice(exits2, 1);
       await axios.put(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/${data._id}`,
-        { friendrequests: requestlist }
+        { ...data, friendrequests: requestlist }
       );
     }
   };
@@ -99,8 +100,15 @@ export default function Friends() {
               ) : (
                 userData.friends.map((item, index) => (
                   <div className="userData">
-                    <img src={item.avatar} alt="" width={42} height={42} />
-                    <h4>{item.username}</h4>
+                    <div className="friendName">
+                      <img src={item.avatar} alt="" width={42} height={42} />
+                      <h4>{item.name}</h4>
+                    </div>
+                    <Link href={`/chat/${item.googleId}`}>
+                      <a>
+                        <Message />
+                      </a>
+                    </Link>
                   </div>
                 ))
               )}
@@ -147,6 +155,9 @@ export default function Friends() {
           img {
             border-radius: 999px;
           }
+          .friendName {
+            display: flex;
+          }
           label {
             margin-right: 10px;
           }
@@ -172,6 +183,7 @@ export default function Friends() {
           .userData {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             margin: 4px 8px;
           }
         `}

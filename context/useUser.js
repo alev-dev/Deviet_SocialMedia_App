@@ -18,6 +18,13 @@ export const AuthProvider = ({ children }) => {
     };
   }, []);
 
+  const getChatUser = async () => {
+    const { data } = await axios.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/${user.googleId}`
+    );
+    setUser(data);
+  };
+
   const getUser = async (callback) => {
     const idToken = localStorage.getItem("token");
     if (idToken) {
@@ -43,7 +50,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, getUser, socket }}>
+    <AuthContext.Provider value={{ user, getUser, getChatUser, socket }}>
       {children}
     </AuthContext.Provider>
   );
