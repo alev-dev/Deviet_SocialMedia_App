@@ -132,6 +132,7 @@ export default function Chat({ receptor }) {
         message,
       },
     });
+    setmessage("");
   };
 
   return (
@@ -158,6 +159,7 @@ export default function Chat({ receptor }) {
             type="text"
             name=""
             id=""
+            value={message}
             onChange={(e) => setmessage(e.target.value)}
           />
           <label onClick={() => SendMessage()}>
