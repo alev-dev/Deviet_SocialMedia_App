@@ -36,7 +36,7 @@ export default function Timeline() {
       <Navbar pos={0} />
       <nav>
         {online.map((user, index) => (
-          <img key={index} src={user.avatar} alt="" width={25} />
+          <img key={index} src={user.avatar} alt="" width={25} height={25} />
         ))}
       </nav>
       <section>
