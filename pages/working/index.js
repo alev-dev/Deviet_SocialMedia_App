@@ -5,7 +5,7 @@ export default function Working() {
   return (
     <>
       <div>
-        <h2>Esta funcionalidad esta en desarrollo</h2>
+        <h2>This Page are in Working</h2>
         <Work />
         <Link href="/timeline">
           <button>

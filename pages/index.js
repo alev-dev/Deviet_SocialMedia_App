@@ -51,7 +51,7 @@ export default function Home() {
               onClick={renderProps.onClick}
               disabled={renderProps.disabled}
             >
-              <h4> Iniciar sesion con google</h4>
+              <h4> Login with Gogle Account</h4>
             </button>
           )}
           onSuccess={responseGoogle}

@@ -177,6 +177,8 @@ export default function Chat({ receptor }) {
           display: flex;
           flex-direction: column;
           overflow-y: scroll;
+          border-radius: 8px;
+          width: 95%;
         }
         .message {
           display: flex;

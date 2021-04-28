@@ -91,7 +91,7 @@ export default function Friends() {
         <div>
           <main>
             <div className="friends">
-              <h3>Amigos</h3>
+              <h3>Friends</h3>
               {userData.friends.length === 0 ? (
                 <div className="imageEmpty">
                   <Empty />
@@ -115,7 +115,7 @@ export default function Friends() {
             </div>
           </main>
           <main>
-            <h4>Otras personas</h4>
+            <h4>Others</h4>
             <div className="others">
               {others.map(
                 (item, index) =>

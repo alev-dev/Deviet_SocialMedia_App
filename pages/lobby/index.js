@@ -73,7 +73,7 @@ export default function Lobby() {
       </main>
       <section>
         <div className="message">
-          <h5>Escribe tu mensaje aqui</h5>
+          <h5>Write Here 👇</h5>
           <div className="inputicon">
             <input
               type="text"
@@ -96,6 +96,8 @@ export default function Lobby() {
             margin-right: 4px;
             overflow-y: scroll;
             background-color: #eee;
+            border-radius: 8px;
+            width: 95%;
           }
           .comm {
             display: flex;
